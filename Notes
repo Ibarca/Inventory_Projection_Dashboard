@@ -1,0 +1,18 @@
+Data I need: 
+-snapshot date with inventory status
+
+-Forecast baseline (simple but solid) will be calculated from inventory history. (avg 365)
+-Rolling callender for the next 365 days - How to do that
+
+SKU data (uom not needed)
+  -sku_id
+  -brand
+  -category
+  
+Supplier list 
+Inbound schedule by day
+
+fact_sales_daily previous years
+  -date
+  -sku_id
+  -units_sold
