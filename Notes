@@ -9,10 +9,12 @@ SKU data (uom not needed)
   -brand
   -category
   
-Supplier list 
 Inbound schedule by day
 
 fact_sales_daily previous years
   -date
   -sku_id
   -units_sold
+
+
+900043 900010  900022   0 sales
