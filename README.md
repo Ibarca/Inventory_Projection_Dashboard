@@ -93,6 +93,9 @@ Window functions are the core analytical layer of this query, enabling advanced 
 
 They are used first for ranking and prioritization, assigning revenue-based ranks to SKUs and calculating cumulative revenue contribution to support ABC (Pareto) classification. This allows large assortments to be quickly prioritized based on business impact.
 
+<img width="612" height="582" alt="image" src="https://github.com/user-attachments/assets/b59795a2-ee0e-40b2-9c63-c0c6002c25a0" />
+
+
 They also power the projected service level, calculated as a forward-looking availability ratio over the next 24 weeks. By averaging a binary in-stock indicator across a future window, the model estimates how reliably each SKU will be available over time.
 
 Finally, window functions support the reach and stockout logic by identifying the first projected stockout week and date, counting total projected weeks, and deriving the number of weeks until stockout. Together, these metrics provide a clear, actionable view of urgency and inventory risk.
