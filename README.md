@@ -69,25 +69,52 @@ The query integrates the following datasets:
 
 ![Data_sources](https://github.com/user-attachments/assets/4ef4e223-1a91-4783-906f-9d6234a7854e)
 
+---
 
-⚙️ Technical approach
+
+## ⚙️ Technical approach
 
 • Recursive CTEs are used to model true week-over-week inventory evolution
 
 Inventory is a stateful metric: the stock you have in week t depends on the stock remaining in week t–1. That dependency is why the query uses a recursive CTE (weekly_projection).
 
-In my logic:
-• Anchor week (rn = 1): starts from the initial stock snapshot (inventory_snapshot_2026_01_01) plus inbound for that week minus demand for that week, with a true floor at 0 using GREATEST(0, …).
-• Recursive step (rn = previous rn + 1): each next week uses the previous week’s inventory_projection as the base, then applies weekly inbound and weekly demand again.
+The inventory projection follows a stateful, week-by-week logic that mirrors how stock evolves in real operations. The model starts with an anchor week, which represents the first week of the projection horizon. For this initial step, inventory is calculated using the starting stock snapshot, adjusted by adding incoming quantities for the week and subtracting expected demand. A strict floor is applied to ensure inventory never drops below zero, reflecting the physical constraint of real stock.
 
-This prevents common mistakes like treating each week independently or allowing negative stock, and it produces a realistic inventory trajectory that behaves like real operations.
+From that point onward, the projection advances recursively. Each subsequent week builds directly on the projected inventory level of the previous week, again incorporating inbound deliveries and expected demand for the current week. By continuously carrying forward the inventory state, the model accurately captures the cumulative impact of demand and replenishment decisions over time.
+
+This recursive approach avoids common pitfalls such as treating each week as an isolated calculation or allowing negative stock levels, resulting in a realistic and operationally sound inventory trajectory.
 
 ![F465A7F4-20AC-4429-ACEF-43D01E9C9DE6](https://github.com/user-attachments/assets/f9d08216-bc8b-4cc8-b8cd-94f92d42099f)
 
 
 • Window functions support ranking, service level calculation, and reach logic
+
+Window functions are the core analytical layer of this query, enabling advanced KPIs while preserving SKU × week granularity.
+
+They are used first for ranking and prioritization, assigning revenue-based ranks to SKUs and calculating cumulative revenue contribution to support ABC (Pareto) classification. This allows large assortments to be quickly prioritized based on business impact.
+
+They also power the projected service level, calculated as a forward-looking availability ratio over the next 24 weeks. By averaging a binary in-stock indicator across a future window, the model estimates how reliably each SKU will be available over time.
+
+Finally, window functions support the reach and stockout logic by identifying the first projected stockout week and date, counting total projected weeks, and deriving the number of weeks until stockout. Together, these metrics provide a clear, actionable view of urgency and inventory risk.
+
 • ISO calendar logic ensures consistent weekly alignment
+
+Using ISO calendar logic is critical for ensuring that all components of the inventory projection are perfectly aligned on the same weekly time axis. In this project, every time-based calculation is standardized to ISO weeks so that demand, inbound supply, and inventory balances are evaluated consistently.
+
+The ISO calendar defines weeks in a uniform way across years, with each week starting on Monday and belonging unambiguously to a specific ISO year and week number. This avoids common edge cases around year transitions where calendar weeks can otherwise be split or misclassified.
+
+In the query, a complete ISO-week calendar is generated directly in SQL for the full projection horizon. This calendar acts as the backbone of the model and is cross-joined with the SKU list to ensure that every SKU has a row for every week, even when no demand or inbound activity exists. As a result, the inventory projection remains continuous and the recursive logic never breaks due to missing weeks.
+
+Incoming purchase orders are also aggregated using the same ISO-week definition by truncating expected delivery dates to ISO weeks. This guarantees that inbound quantities are counted in the same weekly buckets as demand and inventory consumption.
+
+By enforcing a single, consistent ISO-week structure across all inputs, the model avoids misalignment between sales, orders, and stock movements, producing a reliable and operationally meaningful weekly inventory projection.
+
+<img width="565" height="221" alt="image" src="https://github.com/user-attachments/assets/a98c6d45-430f-4895-a9b3-443443e3e9ff" />
+
+
 • All heavy transformations run in SQL to avoid BI-layer complexity
+
+All heavy transformations are executed directly in SQL to leverage BigQuery’s scalability and keep the BI layer simple and performant. Complex logic such as demand aggregation, ISO-week alignment, recursive inventory projection, and KPI calculations is handled upstream, producing a clean, fully enriched dataset. This allows Looker Studio to focus purely on visualization and interaction, avoids duplicated logic across dashboards, ensures consistent KPI definitions, and makes the overall solution easier to scale, maintain, and audit.
 
 This approach keeps business logic centralized, version-controlled, and easy to audit.
 
