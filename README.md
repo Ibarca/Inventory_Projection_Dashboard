@@ -55,9 +55,17 @@ This logic has been implemented and refined in real business environments and is
 
 ## 🏗️ Data sources
 
-The query integrates the following source tables:
+All data used in this project is simulated to closely reflect real-world operating conditions. Incoming purchase orders include delivery deviations of up to ±10 days, depending on the supplier, to mirror typical lead-time variability. In addition, selected purchase orders were intentionally removed to create controlled stockout scenarios, allowing the dashboard to demonstrate different levels of inventory risk and stress-test the projection logic.
 
-• SKU master data (cost, brand, supplier, category)
-• Daily sales history (used to compute annual demand and velocity)
-• Inventory snapshot at the start of the projection horizon
-• Incoming purchase orders with expected del
+The initial goal was to build a daily inventory projection. However, at SKU scale this approach proved too resource-intensive in BigQuery. To balance realism and performance, the model was redesigned around the standardized ISO week calendar, resulting in a 53-week projection horizon that aligns well with operational planning cycles.
+
+The query integrates the following datasets:
+
+• SKU master data (category, brand, supplier, unit cost)
+• Historical daily sales data (used for demand and revenue estimation)
+• Inventory snapshot at the start of the projection period
+• Incoming purchase orders with expected delivery dates
+• ISO-week calendar generated directly in SQL for the projection horizon
+
+<img width="1284" height="709" alt="Data sources" src="https://github.com/user-attachments/assets/4f4f3745-9da8-4014-b8fa-ebe167c3704f" />
+
