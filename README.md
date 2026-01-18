@@ -14,19 +14,19 @@ The dashboard is built for Category Management, Supply Chain, and Operations tea
 
 The query produces a weekly, ISO-calendar inventory projection at SKU level, applying a true stock floor that never allows inventory to drop below zero. The results are enriched with multiple analytical layers designed to support proactive inventory management:
 
-• Projected inventory units and value over time – Enabling early detection of upcoming stockouts and timely corrective actions
+• Projected inventory units and value over time: Enabling early detection of upcoming stockouts and timely corrective actions, curcial for the manager to preventibly react on time
 
-• Inbound inventory visibility and valuation – Providing an immediate overview of open purchase orders per SKU, both in units and monetary value
+• Inbound inventory visibility and valuation: Providing an immediate overview of open purchase orders per SKU, both in units and monetary value
 
-• Demand projections based on historical sales velocity – Demand is derived from average sales velocities from the previous year; this logic can easily be replaced by more advanced forecasting techniques, which are explored in a separate project
+• Demand projections based on historical sales velocity: Demand is derived from average sales velocities from the previous year; this logic can easily be replaced by more advanced forecasting techniques, which are explored in a separate project
 
-• Projected service level over a forward-looking horizon – The dashboard displays the expected service level over the next six months based on projected inventory availability
+• Projected service level over a forward-looking horizon: The dashboard displays the expected service level over the next six months based on projected inventory availability. Since last orders are expected to arrive between 6 and 7 months from the initial date, 6 months is considered a reasonable time horizon to measure service.
 
-• First expected stockout date and reach in weeks – Allowing management to assess the severity and urgency of potential stockouts and respond in time
+• First expected stockout date and reach in weeks: Allowing management to assess the severity and urgency of potential stockouts and respond in time
 
-• ABC classification based on revenue contribution – SKUs are ranked by prior-year revenue and segmented using Pareto-based ABC classification to support effective prioritization
+• ABC classification based on revenue contribution: SKUs are ranked by prior-year revenue and segmented using Pareto-based ABC classification to support effective prioritization. The Paretto logic used is 40-40-20
 
-• Stockout risk and sales velocity segmentation – SKUs are grouped into clear risk and velocity buckets, making it easy to identify items at stockout risk as well as dead or slow-moving inventory
+• Stockout risk and sales velocity segmentation: SKUs are grouped into clear risk and velocity buckets, making it easy to identify items at stockout risk as well as dead or slow-moving inventory
 
 All transformations and calculations are executed in BigQuery SQL, producing a dataset that is directly ready for consumption by a BI layer. Metric names are standardized and simplified in the visualization layer, while charts and tables are arranged following core dashboard design principles to ensure clarity and usability.
 
@@ -44,7 +44,7 @@ The resulting dataset is consumed directly by Looker Studio, which render the in
 
 • Evaluate the impact of incoming purchase orders on future availability
 
-• Track inventory value evolution over time
+• Track inventory units and value evolution over time
 
 • Segment assortment by sales velocity and risk
 
@@ -107,13 +107,7 @@ Finally, window functions support the reach and stockout logic by identifying th
 
 • ISO calendar logic ensures consistent weekly alignment
 
-Using ISO calendar logic is critical for ensuring that all components of the inventory projection are perfectly aligned on the same weekly time axis. In this project, every time-based calculation is standardized to ISO weeks so that demand, inbound supply, and inventory balances are evaluated consistently.
-
-The ISO calendar defines weeks in a uniform way across years, with each week starting on Monday and belonging unambiguously to a specific ISO year and week number. This avoids common edge cases around year transitions where calendar weeks can otherwise be split or misclassified.
-
-In the query, a complete ISO-week calendar is generated directly in SQL for the full projection horizon. This calendar acts as the backbone of the model and is cross-joined with the SKU list to ensure that every SKU has a row for every week, even when no demand or inbound activity exists. As a result, the inventory projection remains continuous and the recursive logic never breaks due to missing weeks.
-
-Incoming purchase orders are also aggregated using the same ISO-week definition by truncating expected delivery dates to ISO weeks. This guarantees that inbound quantities are counted in the same weekly buckets as demand and inventory consumption.
+ISO calendar logic ensures that demand, inbound supply, and inventory are all evaluated on the same consistent weekly timeline. By standardizing everything to ISO weeks starting on Monday, the model avoids year-transition edge cases and misaligned weeks. A complete ISO-week calendar is generated in SQL and cross-joined with SKUs to guarantee continuous weekly rows, even when no activity exists, so the recursive projection never breaks. Inbound purchase orders are aggregated using the same ISO-week definition, ensuring that supply, demand, and inventory movements align perfectly.
 
 By enforcing a single, consistent ISO-week structure across all inputs, the model avoids misalignment between sales, orders, and stock movements, producing a reliable and operationally meaningful weekly inventory projection.
 
