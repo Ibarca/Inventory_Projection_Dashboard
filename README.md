@@ -67,7 +67,7 @@ The query integrates the following datasets:
 • Incoming purchase orders with expected delivery dates
 • ISO-week calendar generated directly in SQL for the projection horizon
 
-<img width="1536" height="1024" alt="Inventory projection data flow diagram" src="https://github.com/user-attachments/assets/851fa15a-58e7-46b2-a48e-2ddc7589a442" />
+<img width="1536" height="1024" alt="ChatGPT Image Jan 18, 2026, 11_32_36 AM" src="https://github.com/user-attachments/assets/8b497696-5d99-43e6-9159-28a147d05cdf" />
 
 
 ---
