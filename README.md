@@ -144,8 +144,7 @@ This approach also ensures that no heavy or complex computations are performed a
 
 The dashboard is designed to aggregate metrics only where this adds decision-making value. SKU-level indicators such as stockout risk and projected stockout date are inherently item-specific and are therefore shown only when analyzing individual SKUs.
 
-![468B8BEA-B60C-48E5-9D5C-110EA238128C_4_5005_c](https://github.com/user-attachments/assets/49ff27c2-a7f6-4a60-a65f-7f4947a1dbcd)
-
+![F97D9DEB-E90A-4240-98F5-29D6F6873A23_4_5005_c](https://github.com/user-attachments/assets/c7f060b5-4262-4ee0-9271-8843811df1d0)
 
 When multiple SKUs are selected, reach in weeks is displayed as an average to provide a high-level view of inventory coverage. SKUs classified as dead stock are excluded from this calculation, as they would disproportionately skew the results and reduce interpretability.
 
@@ -177,6 +176,7 @@ All data used in this project is fully synthetic and has been generated to simul
 It is important to note that the dashboard is based on static data, and the underlying SQL queries reference fixed dates. In a real production environment, these calculations would be driven by dynamic dates and automatically recalculated as time progresses. This adjustment is straightforward and does not affect the core logic of the model.
 
 Demand forecasting in this project is based on average sales from the previous year, rather than a full seasonal forecasting model. This choice was made deliberately to keep the focus on inventory projection mechanics and decision-oriented insights. That said, incorporating a seasonality-aware forecasting approach would be a natural and easily implementable extension of the current model.
+
 ---
 
 
