@@ -121,17 +121,37 @@ All heavy transformations are executed directly in SQL to leverage BigQuery’s 
 
 This approach keeps business logic centralized, version-controlled, and easy to audit.
 
-📈 Output & BI integration
+---
 
-The final output is a BI-ready table with standardized metric names and clear business labels. It can be directly connected to tools such as:
 
-• Looker Studio
-• Google Sheets
-• Other BI or reporting layers
+##📈 Output & Lookr Studio integration
 
-The dashboard built on top of this dataset follows core dashboard design principles, combining KPIs, tables, and time-series views into an intuitive layout for operational decision making.
+The final output of this pipeline is a fully materialized, analysis-ready table that can be directly imported into Looker Studio.
 
-🗂️ Repository structure
+The original idea was to run the full query inside Looker Studio itself; however, Looker Studio does not support recursive CTEs. For this reason, the inventory projection logic is executed in BigQuery, and the results are then imported into Looker Studio already fully calculated.
+
+This approach also ensures that no heavy or complex computations are performed at the dashboard layer, keeping the visualization fast, lightweight, and highly responsive. Since the data operates at a weekly granularity, a live connection is not required—updating the table once per week is more than sufficient and does not introduce any operational limitations.
+
+
+![D7F3C5BD-F561-4E17-8AF7-392BA729923B_4_5005_c](https://github.com/user-attachments/assets/01567b95-ab34-4a90-ba03-80bb3638a4f9)
+
+
+
+---
+
+
+##📊 Final Dashboard
+
+The dashboard is designed to aggregate metrics only where this adds decision-making value. SKU-level indicators such as stockout risk and projected stockout date are inherently item-specific and are therefore shown only when analyzing individual SKUs.
+
+When multiple SKUs are selected, reach in weeks is displayed as an average to provide a high-level view of inventory coverage. SKUs classified as dead stock are excluded from this calculation, as they would disproportionately skew the results and reduce interpretability.
+
+Projected service level is also presented as an average and should be used as a directional indicator rather than a standalone KPI. For more meaningful insights, it is recommended to analyze this metric in combination with business-relevant filters such as ABC class or stockout risk, ensuring that focus remains on SKUs with the highest commercial impact.
+
+---
+
+
+##🗂️ Repository structure
 
 /sql
 inventory_projection.sql
@@ -141,11 +161,17 @@ dashboard_screenshot.png
 
 README.md
 
-🧪 Data note
+---
+
+
+##🧪 Data note
 
 The data used in this repository may be synthetic or anonymized. The goal of this project is to demonstrate analytical design, SQL quality, and real-world inventory logic, not to expose proprietary information.
 
-👥 Intended audience
+---
+
+
+##👥 Intended audience
 
 • Category Managers
 • Supply Chain and Inventory Planners
