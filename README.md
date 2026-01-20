@@ -10,7 +10,7 @@ The dashboard is built for Category Management, Supply Chain, and Operations tea
 
 ---
 
-## 📌 What this project does
+##  What this project does
 
 The query produces a weekly, ISO-calendar inventory projection at SKU level, applying a true stock floor that never allows inventory to drop below zero. The results are enriched with multiple analytical layers designed to support proactive inventory management:
 
@@ -34,7 +34,7 @@ The resulting dataset is consumed directly by Looker Studio, which render the in
 
 ---
 
-## 🧠 Business use cases
+##  Business use cases
 
 • Identify SKUs at risk of stockout weeks in advance
 
@@ -53,7 +53,7 @@ This logic has been implemented and refined in real business environments and is
 
 ---
 
-## 🏗️ Data sources
+##  Data sources
 
 All data used in this project is simulated to closely reflect real-world operating conditions. Incoming purchase orders include delivery deviations of up to ±10 days, depending on the supplier, to mirror typical lead-time variability. In addition, selected purchase orders were intentionally removed to create controlled stockout scenarios, allowing the dashboard to demonstrate different levels of inventory risk and stress-test the projection logic.
 
@@ -73,13 +73,14 @@ The query integrates the following datasets:
 
 • ISO-week calendar generated directly in SQL for the projection horizon
 
-<img width="1536" height="1024" alt="Inventory projection data flow diagram (1)" src="https://github.com/user-attachments/assets/6824169b-e469-4511-91b1-a9e8398ad571" />
+<img width="1536" height="1024" alt="Data_Flow" src="https://github.com/user-attachments/assets/78a16ec4-0078-477c-8ad1-51f9dda28519" />
+
 
 
 ---
 
 
-## ⚙️ Technical approach
+## Technical approach
 
 • Recursive CTEs are used to model true week-over-week inventory evolution
 
@@ -130,7 +131,7 @@ This approach keeps business logic centralized, version-controlled, and easy to 
 ---
 
 
-## 📈 Output & Lookr Studio integration
+## Output & Lookr Studio integration
 
 The final output of this pipeline is a fully materialized, analysis-ready table that can be directly imported into Looker Studio.
 
@@ -146,7 +147,7 @@ This approach also ensures that no heavy or complex computations are performed a
 ---
 
 
-## 📊 Final Dashboard
+## Final Dashboard
 
 The dashboard is designed to aggregate metrics only where this adds decision-making value. SKU-level indicators such as stockout risk and projected stockout date are inherently item-specific and are therefore shown only when analyzing individual SKUs.
 
@@ -162,20 +163,7 @@ Projected service level is also presented as an average and should be used as a 
 ---
 
 
-## 🗂️ Repository structure
-
-/sql
-inventory_projection.sql
-
-/docs
-dashboard_screenshot.png
-
-README.md
-
----
-
-
-## 🧪 Data note
+## Data note
 
 All data used in this project is fully synthetic and has been generated to simulate real-world inventory and supply-chain scenarios as closely as possible. The objective of this repository is to showcase analytical design, SQL quality, and robust inventory logic rather than to expose or rely on proprietary or sensitive business data.
 
