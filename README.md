@@ -177,12 +177,29 @@ Demand forecasting in this project is based on average sales from the previous y
 ---
 
 
-## 👥 Intended audience
+## Intended audience
 
 • Category Managers
 • Supply Chain and Inventory Planners
 • BI and Data Analytics teams
 • Hiring managers reviewing analytics portfolios
 
-This project represents a realistic, production-style inventory analytics use case, suitable for both operational environments and professional data portfolios.
+---
+## 📬 Contact
+
+If you’d like to discuss this project, analytics methodologies, or potential collaboration opportunities, please feel free to reach out, preferably by email:
+
+Email: ibarreirocanda@gmail.com  
+LinkedIn: https://www.linkedin.com/in/yago-b-35582644/
+
+---
+## 💖 Support & Donations
+
+If you find this project useful and would like to support its continued development, you can do so via a donation.
+Your support helps me invest more time in building, maintaining, and extending data analytics projects like this one.
+
+Donations are entirely optional, but always appreciated 🙏
+
+☕ Buy Me a Coffee: https://buymeacoffee.com/ibarca
+
 
